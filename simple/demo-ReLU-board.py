@@ -6,15 +6,18 @@ mnist = input_data.read_data_sets('MNIST_data', one_hot=True)
 # 初始化session
 sess = tf.InteractiveSession()
 
-# 出事化变量 占位符
-# 图片像素展开
-x = tf.placeholder("float", shape=[None, 784])
-# 预测结果值
-y_ = tf.placeholder("float", shape=[None, 10])
+with tf.name_scope('input'):
+    # 图片像素展开
+    x = tf.placeholder("float", shape=[None, 784])
+    # 预测结果值
+    y_ = tf.placeholder("float", shape=[None, 10])
+
+with tf.name_scope('input_reshape'):
+    image_shaped_input = tf.reshape(x, [-1, 28, 28, 1])
+    tf.summary.image('input', image_shaped_input, 10)
 
 
 # 构建一个多层卷积网络
-
 def weight_variable(shape):
     initial = tf.truncated_normal(shape, stddev=0.1)
     return tf.Variable(initial)
@@ -36,11 +39,9 @@ def max_pool_2x2(x):
 
 # 第一层卷积
 W_conv1 = weight_variable([5, 5, 1, 32])
-print(W_conv1)
 b_conv1 = bias_variable([32])
 # 将变量维度x塑造为4维变量
 x_image = tf.reshape(x, [-1, 28, 28, 1])
-print(x_image)
 
 h_conv1 = tf.nn.relu(conv2d(x_image, W_conv1) + b_conv1)
 h_pool1 = max_pool_2x2(h_conv1)
