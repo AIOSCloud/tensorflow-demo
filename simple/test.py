@@ -49,7 +49,7 @@ op4 = tf.nn.conv2d(input, filter, strides=[1, 1, 1, 1], padding='VALID')
 # case 5
 # 输入一张5*5大小的图片,图像通道数为5,卷积核带下为3*3,数量为1
 # 步长为[1,1,1,1]最后得到一个5*5的feature map(考虑边界)
-# 1 张图最后输出的就是一个shape为[1,,5,5,1]的张量
+# 1 张图最后输出的就是一个shape为[1,5,5,1]的张量
 input = tf.Variable(tf.random_normal([1, 5, 5, 5]))
 filter = tf.Variable(tf.random_normal([3, 3, 5, 1]))
 op5 = tf.nn.conv2d(input, filter, strides=[1, 1, 1, 1], padding='SAME')
@@ -78,6 +78,12 @@ input = tf.Variable(tf.random_normal([10, 5, 5, 5]))
 filter = tf.Variable(tf.random_normal([3, 3, 5, 7]))
 op8 = tf.nn.conv2d(input, filter, strides=[1, 2, 2, 1], padding='SAME')
 
+# case 9
+# 输入是50张28*28大小的图片,图像通道为1,卷积核的大小为5*5
+input = tf.Variable(tf.random_normal([50, 28, 28, 1]))
+filter = tf.Variable(tf.random_normal([5, 5, 1, 64]))
+op9 = tf.nn.conv2d(input, filter, strides=[1, 1, 1, 1], padding='SAME')
+
 init = tf.initialize_all_variables()
 with tf.Session() as sess:
     sess.run(init)
@@ -97,3 +103,5 @@ with tf.Session() as sess:
     print(sess.run(op7))
     print('*' * 20 + ' op8 ' + '*' * 20)
     print(sess.run(op8))
+    print('*' * 20 + ' op9 ' + '*' * 20)
+    print(sess.run(op9))
